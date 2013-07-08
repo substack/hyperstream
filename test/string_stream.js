@@ -14,7 +14,7 @@ test('string before a stream', function (t) {
     });
     var rs = through();
     rs.pipe(hs).pipe(concat(function (src) {
-        t.equal(src, [
+        t.equal(src.toString(), [
             '<div class="a">' + Array(SIZE).join('THEBEST') + '</div>',
             '<div class="b">onetwothreefourfive</div>'
         ].join(''));

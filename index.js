@@ -7,12 +7,20 @@ module.exports = function (streams) {
     var tr = trumpet();
     Object.keys(streams).forEach(function (key) {
         var value = streams[key];
+        var vstream;
+        
+        if (typeof value === 'object' && value.pipe) {
+            vstream = through().pause();
+            value.pipe(vstream);
+        }
+        
         tr.selectAll(key, function (elem) {
             if (typeof value === 'string') {
                 elem.createWriteStream().end(value);
             }
             else if (typeof value === 'object' && value.pipe) {
-                value.pipe(elem.createWriteStream());
+                vstream.pipe(elem.createWriteStream());
+                vstream.resume();
             }
             else if (typeof value === 'function') {
                 var stream = elem.createStream();

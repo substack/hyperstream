@@ -1,17 +1,17 @@
 {
     "name" : "hyperstream",
-    "version" : "0.3.0",
+    "version" : "0.3.1",
     "description" : "stream html into html at a css selector",
     "main" : "index.js",
     "dependencies" : {
         "trumpet" : "~1.5.0",
         "duplexer" : "~0.0.2",
         "through" : "~2.3.4",
+        "concat-stream" : "~1.0.0",
         "throughout" : "~0.0.0"
     },
     "devDependencies" : {
         "tap" : "~0.4.0",
-        "concat-stream" : "~1.0.0",
         "hyperquest" : "~0.1.5"
     },
     "scripts" : {

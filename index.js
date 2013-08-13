@@ -22,6 +22,11 @@ module.exports = function (streams) {
                 vstream.pipe(elem.createWriteStream());
                 vstream.resume();
             }
+            else if (typeof value === 'object') {
+                Object.keys(value).forEach(function (sel) {
+                    elem.setAttribute(sel, value[sel]);
+                });
+            }
             else if (typeof value === 'function') {
                 var stream = elem.createStream();
                 stream.pipe(concat(function (body) {

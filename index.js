@@ -18,13 +18,16 @@ module.exports = function (streams) {
             if (typeof value === 'string') {
                 elem.createWriteStream().end(value);
             }
-            else if (typeof value === 'object' && value.pipe) {
+            else if (isStream(value)) {
                 vstream.pipe(elem.createWriteStream());
                 vstream.resume();
             }
             else if (typeof value === 'object') {
                 Object.keys(value).forEach(function (sel) {
-                    elem.setAttribute(sel, value[sel]);
+                    if (sel === '_html') {
+                        value[sel].pipe(elem.createWriteStream())
+                    }
+                    else elem.setAttribute(sel, value[sel]);
                 });
             }
             else if (typeof value === 'function') {
@@ -37,3 +40,5 @@ module.exports = function (streams) {
     });
     return tr;
 };
+
+function isStream (s) { return s && typeof s.pipe === 'function' }

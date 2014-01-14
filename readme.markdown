@@ -43,6 +43,20 @@ keys.
 If `streamMap` values are strings or functions, update the contents at the css
 selector key with their contents directly without using a stream.
 
+If `streamMap` values are non-stream objects, iterate over the keys and set
+attributes for each key. If you use a special `_html` key with a stream value,
+you can set attributes and stream contents for the same element:
+
+``` js
+hyperstream({
+    '#content': {
+        _html: stream,
+        'data-start': 'cats!',
+        'data-end': 'cats!\ufff'
+    }
+})
+```
+
 ## hs.select(), hs.update(), hs.replace(), hs.remove()
 
 Proxy through methods to the underlying

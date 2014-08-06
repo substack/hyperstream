@@ -1,5 +1,5 @@
 var trumpet = require('trumpet');
-var through = require('through');
+var through = require('through2');
 var concat = require('concat-stream');
 
 module.exports = function (streams) {
@@ -10,7 +10,7 @@ module.exports = function (streams) {
         var vstream;
         
         if (typeof value === 'object' && value.pipe) {
-            vstream = through().pause();
+            vstream = through();
             value.pipe(vstream);
         }
         
@@ -25,7 +25,6 @@ module.exports = function (streams) {
             }
             else if (isStream(value)) {
                 vstream.pipe(elem.createWriteStream());
-                vstream.resume();
             }
             else if (typeof value === 'object') {
                 Object.keys(value).forEach(function (sel) {

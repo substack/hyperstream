@@ -4,11 +4,9 @@
   "description": "stream html into html at a css selector",
   "main": "index.js",
   "dependencies": {
-    "concat-stream": "~1.0.0",
-    "duplexer": "~0.0.2",
+    "concat-stream": "^1.0.0",
     "through2": "~0.5.1",
-    "throughout": "~0.0.0",
-    "trumpet": "~1.6.3"
+    "trumpet": "^1.6.4"
   },
   "devDependencies": {
     "through": "~2.3.4",

@@ -1,39 +1,40 @@
 {
-    "name" : "hyperstream",
-    "version" : "0.5.0",
-    "description" : "stream html into html at a css selector",
-    "main" : "index.js",
-    "dependencies" : {
-        "trumpet" : "~1.6.3",
-        "duplexer" : "~0.0.2",
-        "through" : "~2.3.4",
-        "concat-stream" : "~1.0.0",
-        "throughout" : "~0.0.0"
-    },
-    "devDependencies" : {
-        "tap" : "~0.4.0",
-        "hyperquest" : "~0.1.5"
-    },
-    "scripts" : {
-        "test" : "tap test/*.js"
-    },
-    "repository" : {
-        "type" : "git",
-        "url" : "git://github.com/substack/hyperstream.git"
-    },
-    "homepage" : "https://github.com/substack/hyperstream",
-    "keywords" : [
-        "html",
-        "stream",
-        "streaming",
-        "hypertext",
-        "template",
-        "engine"
-    ],
-    "author" : {
-        "name" : "James Halliday",
-        "email" : "mail@substack.net",
-        "url" : "http://substack.net"
-    },
-    "license" : "MIT"
+  "name": "hyperstream",
+  "version": "0.5.0",
+  "description": "stream html into html at a css selector",
+  "main": "index.js",
+  "dependencies": {
+    "concat-stream": "~1.0.0",
+    "duplexer": "~0.0.2",
+    "through2": "~0.5.1",
+    "throughout": "~0.0.0",
+    "trumpet": "~1.6.3"
+  },
+  "devDependencies": {
+    "through": "~2.3.4",
+    "tap": "~0.4.0",
+    "hyperquest": "~0.1.5"
+  },
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/substack/hyperstream.git"
+  },
+  "homepage": "https://github.com/substack/hyperstream",
+  "keywords": [
+    "html",
+    "stream",
+    "streaming",
+    "hypertext",
+    "template",
+    "engine"
+  ],
+  "author": {
+    "name": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net"
+  },
+  "license": "MIT"
 }

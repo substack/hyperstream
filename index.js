@@ -14,7 +14,12 @@ module.exports = function (streams) {
             value.pipe(vstream);
         }
         
-        tr.selectAll(key, function (elem) {
+        if (/:first$/.test(key)) {
+            tr.select(key.replace(/:first$/,''), onmatch);
+        }
+        else tr.selectAll(key, onmatch);
+        
+        function onmatch (elem) {
             if (typeof value === 'string') {
                 elem.createWriteStream().end(value);
             }
@@ -33,12 +38,19 @@ module.exports = function (streams) {
             else if (typeof value === 'function') {
                 var stream = elem.createStream();
                 stream.pipe(concat(function (body) {
-                    stream.end(value(body.toString('utf8')));
+                    stream.end(toStr(value(body.toString('utf8'))));
                 }));
             }
-        });
+            else {
+                elem.createWriteStream().end(String(value));
+            }
+        }
     });
     return tr;
 };
 
 function isStream (s) { return s && typeof s.pipe === 'function' }
+function toStr (s) {
+    if (Buffer.isBuffer(s) || typeof s === 'string') return s;
+    return String(s);
+}

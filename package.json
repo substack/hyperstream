@@ -6,7 +6,8 @@
   "dependencies": {
     "concat-stream": "^1.0.0",
     "through2": "~0.5.1",
-    "trumpet": "^1.6.4"
+    "trumpet": "^1.6.4",
+    "ent": "^2.0.0"
   },
   "devDependencies": {
     "through": "~2.3.4",

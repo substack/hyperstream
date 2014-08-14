@@ -1,6 +1,7 @@
 var hyperstream = require('../');
 var test = require('tap').test;
 var concat = require('concat-stream');
+var ent = require('ent');
 
 test('string _text', function (t) {
     t.plan(1);
@@ -11,7 +12,7 @@ test('string _text', function (t) {
     hs.pipe(concat(function (body) {
         t.equal(
             body.toString('utf8'),
-            '<div class="row">&lt;b&gt;beep boop&lt;/b&gt;</div>'
+            '<div class="row">' + ent.encode('<b>beep boop</b>') + '</div>'
         );
     }));
     hs.end('<div class="row"></div>');

@@ -1,6 +1,7 @@
 var trumpet = require('trumpet');
 var through = require('through2');
 var concat = require('concat-stream');
+var ent = require('ent');
 
 module.exports = function (streams) {
     if (!streams) streams = {};
@@ -38,6 +39,9 @@ module.exports = function (streams) {
                     }
                     else if (prop === '_html') {
                         elem.createWriteStream().end(String(value[prop]));
+                    }
+                    else if (prop === '_text') {
+                        elem.createWriteStream().end(ent.encode(String(v)));
                     }
                     else elem.setAttribute(prop, value[prop]);
                 });

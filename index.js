@@ -27,11 +27,19 @@ module.exports = function (streams) {
                 vstream.pipe(elem.createWriteStream());
             }
             else if (typeof value === 'object') {
-                Object.keys(value).forEach(function (sel) {
-                    if (sel === '_html') {
-                        value[sel].pipe(elem.createWriteStream())
+                Object.keys(value).forEach(function (prop) {
+                    var v = value[prop];
+                    if (prop === '_html' && isStream(v)) {
+                        v.pipe(elem.createWriteStream())
                     }
-                    else elem.setAttribute(sel, value[sel]);
+                    else if (prop === '_html' && (Buffer.isBuffer(v)
+                    || typeof v === 'string')) {
+                        elem.createWriteStream().end(v);
+                    }
+                    else if (prop === '_html') {
+                        elem.createWriteStream().end(String(value[prop]));
+                    }
+                    else elem.setAttribute(prop, value[prop]);
                 });
             }
             else if (typeof value === 'function') {
@@ -48,7 +56,9 @@ module.exports = function (streams) {
     return tr;
 };
 
-function isStream (s) { return s && typeof s.pipe === 'function' }
+function isStream (s) {
+    return s && typeof s.pipe === 'function';
+}
 function toStr (s) {
     if (Buffer.isBuffer(s) || typeof s === 'string') return s;
     return String(s);

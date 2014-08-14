@@ -1,6 +1,8 @@
 var trumpet = require('trumpet');
 var through = require('through2');
 var concat = require('concat-stream');
+var u8 = require('utf8-stream');
+var combine = require('stream-combiner2');
 var ent = require('ent');
 
 module.exports = function (streams) {
@@ -40,6 +42,9 @@ module.exports = function (streams) {
                     else if (prop === '_html') {
                         elem.createWriteStream().end(String(value[prop]));
                     }
+                    else if (prop === '_text' && isStream(v)) {
+                        v.pipe(encoder()).pipe(elem.createWriteStream());
+                    }
                     else if (prop === '_text') {
                         elem.createWriteStream().end(ent.encode(String(v)));
                     }
@@ -66,4 +71,11 @@ function isStream (s) {
 function toStr (s) {
     if (Buffer.isBuffer(s) || typeof s === 'string') return s;
     return String(s);
+}
+
+function encoder () {
+    return combine(u8(), through(function (buf, enc, next) {
+        this.push(ent.encode(buf.toString('utf8')));
+        next();
+    }));
 }

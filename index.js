@@ -4,6 +4,7 @@ var concat = require('concat-stream');
 var u8 = require('utf8-stream');
 var combine = require('stream-combiner2');
 var ent = require('ent');
+var keepalive = {end: false}
 
 module.exports = function (streams) {
     if (!streams) streams = {};
@@ -11,17 +12,17 @@ module.exports = function (streams) {
     Object.keys(streams).forEach(function (key) {
         var value = streams[key];
         var vstream;
-        
+
         if (typeof value === 'object' && value.pipe) {
             vstream = through();
             value.pipe(vstream);
         }
-        
+
         if (/:first$/.test(key)) {
             tr.select(key.replace(/:first$/,''), onmatch);
         }
         else tr.selectAll(key, onmatch);
-        
+
         function onmatch (elem) {
             if (typeof value === 'string') {
                 elem.createWriteStream().end(value);
@@ -48,6 +49,34 @@ module.exports = function (streams) {
                     else if (prop === '_text') {
                         elem.createWriteStream().end(ent.encode(String(v)));
                     }
+                    else if (prop === '_append' && (Buffer.isBuffer(v)
+                    || typeof v === 'string')) {
+                        var body = elem.createStream();
+                        body.pipe(body, keepalive);
+                        body.on('end', function(){
+                          body.end(v);
+                        });
+                    }
+                    else if (prop === '_append' && isStream(v)) {
+                        var body = elem.createStream();
+                        body.pipe(body, keepalive);
+                        body.on('end', function(){
+                          v.pipe(body)
+                        });
+                    }
+                    else if (prop === '_prepend' && (Buffer.isBuffer(v)
+                    || typeof v === 'string')) {
+                        var body = elem.createStream();
+                        body.write(v);
+                        body.pipe(body);
+                    }
+                    else if (prop === '_prepend' && isStream(v)) {
+                        var body = elem.createStream();
+                        v.pipe(body, keepalive)
+                        v.on('end', function(){
+                          body.pipe(body);
+                        });
+                    }
                     else elem.setAttribute(prop, value[prop]);
                 });
             }
@@ -68,6 +97,7 @@ module.exports = function (streams) {
 function isStream (s) {
     return s && typeof s.pipe === 'function';
 }
+
 function toStr (s) {
     if (Buffer.isBuffer(s) || typeof s === 'string') return s;
     return String(s);

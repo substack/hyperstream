@@ -44,8 +44,22 @@ If `streamMap` values are strings or functions, update the contents at the css
 selector key with their contents directly without using a stream.
 
 If `streamMap` values are non-stream objects, iterate over the keys and set
-attributes for each key. If you use a special `_html` key with a stream value,
-you can set attributes and stream contents for the same element:
+attributes for each key.
+
+These attributes are special. Each attribute can be a string, buffer, or stream:
+
+* `_html` - set the inner content as raw html
+* `_text` - set the inner content as text encoded as html entities
+* `_append`, `_appendText` - add text to the end of the inner content encoded as
+html entities
+* `_appendHtml` - add raw html to the end of the inner content
+* `_prepend`, `_prependText` - add text to the beginning of the inner content
+encoded as html entities
+* `_prependHtml` - add raw html to the beginning of the inner context
+
+
+For example, to set raw html into the inner content with the `_html` attribute,
+do:
 
 ``` js
 hyperstream({

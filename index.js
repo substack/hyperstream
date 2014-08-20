@@ -31,6 +31,7 @@ module.exports = function (streams) {
             }
             else if (typeof value === 'object') {
                 Object.keys(value).forEach(function (prop) {
+                    var lprop = prop.toLowerCase();
                     var v = value[prop];
                     if (prop === '_html' && isStream(v)) {
                         v.pipe(elem.createWriteStream())
@@ -48,26 +49,54 @@ module.exports = function (streams) {
                     else if (prop === '_text') {
                         elem.createWriteStream().end(ent.encode(String(v)));
                     }
-                    else if (prop === '_append' && (Buffer.isBuffer(v)
+                    else if (lprop === '_appendhtml' && (Buffer.isBuffer(v)
                     || typeof v === 'string')) {
                         var body = elem.createStream();
                         body.pipe(body, { end: false });
                         body.on('end', function () { body.end(v) });
                     }
-                    else if (prop === '_append' && isStream(v)) {
+                    else if (lprop === '_appendhtml' && isStream(v)) {
                         var body = elem.createStream();
                         body.pipe(body, { end: false });
                         body.on('end', function (){ v.pipe(body) });
                     }
-                    else if (prop === '_prepend' && (Buffer.isBuffer(v)
+                    else if (lprop === '_prependhtml' && (Buffer.isBuffer(v)
                     || typeof v === 'string')) {
                         var body = elem.createStream();
                         body.write(v);
                         body.pipe(body);
                     }
-                    else if (prop === '_prepend' && isStream(v)) {
+                    else if (lprop === '_prependhtml' && isStream(v)) {
                         var body = elem.createStream();
                         v.pipe(body, { end: false })
+                        v.on('end', function () { body.pipe(body) });
+                    }
+                    else if ((prop === '_append' || lprop === '_appendtext')
+                    && (Buffer.isBuffer(v) || typeof v === 'string')) {
+                        var body = elem.createStream();
+                        body.pipe(body, { end: false });
+                        body.on('end', function () {
+                            body.end(ent.encode(toStr(v)));
+                        });
+                    }
+                    else if ((prop === '_append' || lprop === '_appendtext')
+                    && isStream(v)) {
+                        var body = elem.createStream();
+                        body.pipe(body, { end: false });
+                        body.on('end', function () {
+                            v.pipe(encoder()).pipe(body);
+                        });
+                    }
+                    else if ((prop === '_prepend' || lprop === '_prependtext')
+                    && (Buffer.isBuffer(v) || typeof v === 'string')) {
+                        var body = elem.createStream();
+                        body.write(ent.encode(toStr(v)));
+                        body.pipe(body);
+                    }
+                    else if ((prop === '_prepend' || lprop === '_prependtext')
+                    && isStream(v)) {
+                        var body = elem.createStream();
+                        v.pipe(encoder()).pipe(body, { end: false })
                         v.on('end', function () { body.pipe(body) });
                     }
                     else elem.setAttribute(prop, value[prop]);

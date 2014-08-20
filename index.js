@@ -4,7 +4,6 @@ var concat = require('concat-stream');
 var u8 = require('utf8-stream');
 var combine = require('stream-combiner2');
 var ent = require('ent');
-var keepalive = {end: false}
 
 module.exports = function (streams) {
     if (!streams) streams = {};
@@ -52,17 +51,13 @@ module.exports = function (streams) {
                     else if (prop === '_append' && (Buffer.isBuffer(v)
                     || typeof v === 'string')) {
                         var body = elem.createStream();
-                        body.pipe(body, keepalive);
-                        body.on('end', function(){
-                          body.end(v);
-                        });
+                        body.pipe(body, { end: false });
+                        body.on('end', function () { body.end(v) });
                     }
                     else if (prop === '_append' && isStream(v)) {
                         var body = elem.createStream();
-                        body.pipe(body, keepalive);
-                        body.on('end', function(){
-                          v.pipe(body)
-                        });
+                        body.pipe(body, { end: false });
+                        body.on('end', function (){ v.pipe(body) });
                     }
                     else if (prop === '_prepend' && (Buffer.isBuffer(v)
                     || typeof v === 'string')) {
@@ -72,10 +67,8 @@ module.exports = function (streams) {
                     }
                     else if (prop === '_prepend' && isStream(v)) {
                         var body = elem.createStream();
-                        v.pipe(body, keepalive)
-                        v.on('end', function(){
-                          body.pipe(body);
-                        });
+                        v.pipe(body, { end: false })
+                        v.on('end', function () { body.pipe(body) });
                     }
                     else elem.setAttribute(prop, value[prop]);
                 });

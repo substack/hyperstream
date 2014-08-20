@@ -48,3 +48,48 @@ test('append html', function (t) {
     }));
     hs.end('<div class="row">so </div>');
 });
+
+test('append implicit text pre-existing markup', function (t) {
+    t.plan(1);
+    
+    var hs = hyperstream({
+        '.row': { _append: '<b>wow</b>' }
+    });
+    hs.pipe(concat(function (body) {
+        t.equal(
+            body.toString('utf8'),
+            '<div class="row"><i>so</i> ' + ent.encode('<b>wow</b>') + '</div>'
+        );
+    }));
+    hs.end('<div class="row"><i>so</i> </div>');
+});
+
+test('append text pre-existing markup', function (t) {
+    t.plan(1);
+    
+    var hs = hyperstream({
+        '.row': { _appendText: '<b>wow</b>' }
+    });
+    hs.pipe(concat(function (body) {
+        t.equal(
+            body.toString('utf8'),
+            '<div class="row"><i>so</i> ' + ent.encode('<b>wow</b>') + '</div>'
+        );
+    }));
+    hs.end('<div class="row"><i>so</i> </div>');
+});
+
+test('append html pre-existing markup', function (t) {
+    t.plan(1);
+    
+    var hs = hyperstream({
+        '.row': { _appendHtml: '<b>wow</b>' }
+    });
+    hs.pipe(concat(function (body) {
+        t.equal(
+            body.toString('utf8'),
+            '<div class="row"><i>so</i> <b>wow</b></div>'
+        );
+    }));
+    hs.end('<div class="row"><i>so</i> </div>');
+});

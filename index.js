@@ -99,7 +99,16 @@ module.exports = function (streams) {
                         v.pipe(encoder()).pipe(body, { end: false })
                         v.on('end', function () { body.pipe(body) });
                     }
-                    else elem.setAttribute(prop, value[prop]);
+                    else {
+                        var vp = value[prop];
+                        if (vp && (vp.append || vp.prepend)) {
+                            var cur = elem.getAttribute(prop) || '';
+                            if (vp.append) cur += vp.append;
+                            if (vp.prepend) cur = vp.prepend + cur;
+                            elem.setAttribute(prop, cur);
+                        }
+                        else elem.setAttribute(prop, vp);
+                    }
                 });
             }
             else if (typeof value === 'function') {

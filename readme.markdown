@@ -57,7 +57,6 @@ html entities
 encoded as html entities
 * `_prependHtml` - add raw html to the beginning of the inner context
 
-
 For example, to set raw html into the inner content with the `_html` attribute,
 do:
 
@@ -69,6 +68,34 @@ hyperstream({
         'data-end': 'cats!\ufff'
     }
 })
+```
+
+You can also specify string operations for properties with an object instead of
+a string. The object can have these properties:
+
+* `append`
+* `prepend`
+
+Object properties are particularly handy for adding classes:
+
+``` js
+hyperstream({
+    '.row': {
+        class: { append: ' active' }
+    }
+})
+```
+
+which turns:
+
+``` html
+<div class="row"><b>woo</b></div>
+```
+
+into:
+
+``` html
+<div class="row active"><b>woo</b></div>
 ```
 
 ## hs.select(), hs.update(), hs.replace(), hs.remove()

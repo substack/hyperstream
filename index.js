@@ -8,6 +8,7 @@ var ent = require('ent');
 module.exports = function (streams) {
     if (!streams) streams = {};
     var tr = trumpet();
+    tr.setMaxListeners(Infinity);
     Object.keys(streams).forEach(function (key) {
         var value = streams[key];
         var vstream;

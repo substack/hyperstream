@@ -93,3 +93,20 @@ test('append html pre-existing markup', function (t) {
     }));
     hs.end('<div class="row"><i>so</i> </div>');
 });
+
+test('append and set attribute on child', function (t) {
+    t.plan(1);
+    
+    var hs = hyperstream({
+        '.row': { _appendHtml: '<b>wow</b>' },
+        '.row i': { name: 'foo' }
+    });
+    hs.pipe(concat(function (body) {
+        t.equal(
+            body.toString('utf8'),
+            '<div class="row"><i name="foo">so</i> <b>wow</b></div>'
+        );
+    }));
+    hs.end('<div class="row"><i>so</i> </div>');
+
+});

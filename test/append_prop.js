@@ -63,3 +63,20 @@ test('append and prepend empty property', function (t) {
     }));
     hs.end('<div>so </div>');
 });
+
+test('append property with empty string', function (t) {
+    t.plan(1);
+    
+    var hs = hyperstream({
+        'div': { 'class': { append: '' } }
+    });
+    hs.pipe(concat(function (body) {
+        t.equal(
+            body.toString('utf8'),
+            '<div class="row">so </div>'
+        );
+    }));
+    hs.end('<div class="row">so </div>');
+
+});
+

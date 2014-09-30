@@ -102,7 +102,7 @@ module.exports = function (streams) {
                     }
                     else {
                         var vp = value[prop];
-                        if (vp && (vp.append || vp.prepend)) {
+                        if (vp && isObj(vp)) {
                             var cur = elem.getAttribute(prop) || '';
                             if (vp.append) cur += vp.append;
                             if (vp.prepend) cur = vp.prepend + cur;
@@ -135,9 +135,14 @@ function toStr (s) {
     return String(s);
 }
 
+function isObj (o) {
+    return typeof o === 'object' && o !== null;
+}
+
 function encoder () {
     return combine(u8(), through(function (buf, enc, next) {
         this.push(ent.encode(buf.toString('utf8')));
         next();
     }));
 }
+

@@ -77,6 +77,5 @@ test('append property with empty string', function (t) {
         );
     }));
     hs.end('<div class="row">so </div>');
-
 });
 

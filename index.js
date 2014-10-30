@@ -13,6 +13,7 @@ module.exports = function (streams) {
         var value = streams[key];
         var vstream;
 
+        if (value === null) return;
         if (typeof value === 'object' && value.pipe) {
             vstream = through();
             value.pipe(vstream);

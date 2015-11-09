@@ -2,10 +2,10 @@ var trumpet = require('trumpet');
 var through = require('through2');
 var concat = require('concat-stream');
 var u8 = require('utf8-stream');
-var combine = require('stream-combiner2')
+var combine = require('stream-combiner2');
 var ent = require('ent');
-var str = require('string-to-stream')
-var combiner = require('combine-streams')
+var str = require('string-to-stream');
+var combiner = require('combine-streams');
 
 module.exports = hwm;
 
@@ -40,7 +40,7 @@ function hwm (streams) {
                     var lprop = prop.toLowerCase();
                     var v = value[prop];
                     if (prop === '_html' && isStream(v)) {
-                        v.pipe(elem.createWriteStream())
+                        v.pipe(elem.createWriteStream());
                     }
                     else if (prop === '_html' && (Buffer.isBuffer(v)
                     || typeof v === 'string')) {
@@ -74,7 +74,7 @@ function hwm (streams) {
                     }
                     else if (lprop === '_prependhtml' && isStream(v)) {
                         var body = elem.createStream();
-                        v.pipe(body, { end: false })
+                        v.pipe(body, { end: false });
                         v.on('end', function () { body.pipe(body) });
                     }
                     else if ((prop === '_append' || lprop === '_appendtext')
@@ -102,7 +102,7 @@ function hwm (streams) {
                     else if ((prop === '_prepend' || lprop === '_prependtext')
                     && isStream(v)) {
                         var body = elem.createStream();
-                        v.pipe(encoder()).pipe(body, { end: false })
+                        v.pipe(encoder()).pipe(body, { end: false });
                         v.on('end', function () { body.pipe(body) });
                     }
                     else if (lprop === '_map' && isObj(v)) {
@@ -121,7 +121,7 @@ function hwm (streams) {
                             });
                             trr.select(mapkey).createReadStream({outer:true}).pipe(ccat);
                             body.pipe(trr);
-                        })
+                        });
                     }
                     else {
                         var vp = value[prop];

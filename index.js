@@ -108,30 +108,32 @@ function hwm (streams) {
                         v.on('end', function () { body.pipe(body) });
                     }
                     else if (lprop === '_map' && isObj(v)) {
-                        var mapkey = v[0], mapparams = v[1]
+
                         var body = elem.createStream();
-                        var trr = trumpet();
+                        Object.keys(v).forEach(function (mapkey) {
+                            var trr = trumpet();
 
-                        var ccat = (function () {
-                            var input = concat(function (template) {
-                                var tt = template.toString('utf8')
+                            var ccat = (function () {
+                                var input = concat(function (template) {
+                                    var tt = template.toString('utf8')
 
-                                var cmb = combine()
-                                mapparams.forEach(function (param) {
-                                    cmb.append(function (done) {
-                                        done(null, str(tt).pipe(hwm(param)))
+                                    var cmb = combine()
+                                    v[mapkey].forEach(function (params) {
+                                        cmb.append(function (done) {
+                                            done(null, str(tt).pipe(hwm(params)))
+                                        })
                                     })
-                                })
-                                cmb.append(null).pipe(output)
-                                
-                            });
-                            var output = thr();
-                            return duplexer(input, output);
-                        }());
+                                    cmb.append(null).pipe(output)
+                                    
+                                });
+                                var output = thr();
+                                return duplexer(input, output);
+                            }());
 
-                        trr.select(mapkey).createReadStream({outer:true})
-                            .pipe(ccat).pipe(body);
-                        body.pipe(trr);
+                            trr.select(mapkey).createReadStream({outer:true})
+                                .pipe(ccat).pipe(body);
+                            body.pipe(trr);
+                        })
                     }
                     else {
                         var vp = value[prop];

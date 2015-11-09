@@ -76,7 +76,7 @@ index.html:
 ```
 <html>
   <body>
-    <div id="a"><h1>Group List</h1></div>
+    <div id="a"><h1>Group List:</h1></div>
     <div id="b">
         <div class="row">
             <span class="name">one</span> <span class="age">1</span>
@@ -114,7 +114,7 @@ output:
 ```
 <html>
   <body>
-    <div id="a"><h1>Group List: Nov. 9, 2015</h1></div>
+    <div id="a"><h1>Group List as of: Nov. 9, 2015</h1></div>
     <div id="b">
         <div class="row">
             <span class="name">person</span> <span class="age">10</span>

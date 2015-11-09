@@ -119,7 +119,7 @@ function hwm (streams) {
                                 });
                                 cmb.append(null).pipe(body);
                             });
-                            trr.select(mapkey).createReadStream({outer:true}).pipe(ccat);
+                            trr.createReadStream(mapkey, {outer:true}).pipe(ccat);
                             body.pipe(trr);
                         });
                     }

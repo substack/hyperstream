@@ -10,9 +10,8 @@ var hs = hyperstream({
             '.hey': [
                 {'.name': 'thing', '.age': 'finite'},
                 {'.name': 'calling', '.age': 'eternal'},
-                {'.name': 'calling2', '.age': 'eternal2'},
                 {'.name': 'calling3', '.age': 'eternal3'},
-                {'.name': 'calling4', '.age': 'eternal4'}
+                {'.name': 'essense', '.age': 'infinity'}
             ] 
         }}
 });

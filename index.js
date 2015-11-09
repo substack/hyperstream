@@ -1,10 +1,7 @@
 var trumpet = require('trumpet');
 var through = require('through2');
-var thr = require('through');
-var duplexer = require('duplexer2')
 var concat = require('concat-stream');
 var u8 = require('utf8-stream');
-var combine = require('stream-combiner2');
 var ent = require('ent');
 var str = require('string-to-stream')
 var combine = require('combine-streams')
@@ -113,25 +110,20 @@ function hwm (streams) {
                         Object.keys(v).forEach(function (mapkey) {
                             var trr = trumpet();
 
-                            var ccat = (function () {
-                                var input = concat(function (template) {
-                                    var tt = template.toString('utf8')
+                            var ccat = concat(function (template) {
+                                var tt = template.toString('utf8');
 
-                                    var cmb = combine()
-                                    v[mapkey].forEach(function (params) {
-                                        cmb.append(function (done) {
-                                            done(null, str(tt).pipe(hwm(params)))
-                                        })
-                                    })
-                                    cmb.append(null).pipe(output)
-                                    
+                                var cmb = combine();
+                                v[mapkey].forEach(function (params) {
+                                    cmb.append(function (done) {
+                                        done(null, str(tt).pipe(hwm(params)));
+                                    });
                                 });
-                                var output = thr();
-                                return duplexer(input, output);
-                            }());
+                                cmb.append(null).pipe(body);
+                                
+                            });
 
-                            trr.select(mapkey).createReadStream({outer:true})
-                                .pipe(ccat).pipe(body);
+                            trr.select(mapkey).createReadStream({outer:true}).pipe(ccat);
                             body.pipe(trr);
                         })
                     }

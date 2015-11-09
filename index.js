@@ -105,7 +105,7 @@ function hwm (streams) {
                         v.pipe(encoder()).pipe(body, { end: false });
                         v.on('end', function () { body.pipe(body) });
                     }
-                    else if (lprop === '_map' && isObj(v)) {
+                    else if (prop === '_map' && isObj(v)) {
                         var body = elem.createStream();
                         Object.keys(v).forEach(function (mapkey) {
                             var trr = trumpet();

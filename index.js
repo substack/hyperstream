@@ -2,9 +2,10 @@ var trumpet = require('trumpet');
 var through = require('through2');
 var concat = require('concat-stream');
 var u8 = require('utf8-stream');
+var combine = require('stream-combiner2')
 var ent = require('ent');
 var str = require('string-to-stream')
-var combine = require('combine-streams')
+var combiner = require('combine-streams')
 
 module.exports = hwm;
 
@@ -110,7 +111,7 @@ function hwm (streams) {
                             var trr = trumpet();
                             var ccat = concat(function (template) {
                                 var tt = template.toString('utf8');
-                                var cmb = combine();
+                                var cmb = combiner();
                                 v[mapkey].forEach(function (params) {
                                     cmb.append(function (done) {
                                         done(null, str(tt).pipe(hwm(params)));

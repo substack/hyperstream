@@ -13,7 +13,8 @@ var hs = hyperstream({
                 {'.name': 'calling3', '.age': 'eternal3'},
                 {'.name': 'essense', '.age': 'infinity'}
             ] 
-        }}
+    }},
+    '#c': { _text: fs.createReadStream(__dirname + '/hs/a.html') }
 });
 var rs = fs.createReadStream(__dirname + '/hs/index.html');
 rs.pipe(hs).pipe(process.stdout);

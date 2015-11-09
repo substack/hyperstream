@@ -110,11 +110,10 @@ function hwm (streams) {
                         Object.keys(v).forEach(function (mapkey) {
                             var trr = trumpet();
                             var ccat = concat(function (template) {
-                                var tt = template.toString('utf8');
                                 var cmb = combiner();
                                 v[mapkey].forEach(function (params) {
                                     cmb.append(function (done) {
-                                        done(null, str(tt).pipe(hwm(params)));
+                                        done(null, str(template).pipe(hwm(params)));
                                     });
                                 });
                                 cmb.append(null).pipe(body);

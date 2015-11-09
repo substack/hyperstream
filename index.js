@@ -1,11 +1,17 @@
 var trumpet = require('trumpet');
 var through = require('through2');
+var thr = require('through');
+var duplexer = require('duplexer2')
 var concat = require('concat-stream');
 var u8 = require('utf8-stream');
 var combine = require('stream-combiner2');
 var ent = require('ent');
+var str = require('string-to-stream')
+var combine = require('combine-streams')
 
-module.exports = function (streams) {
+module.exports = hwm;
+
+function hwm (streams) {
     if (!streams) streams = {};
     var tr = trumpet();
     tr.setMaxListeners(Infinity);
@@ -100,6 +106,32 @@ module.exports = function (streams) {
                         var body = elem.createStream();
                         v.pipe(encoder()).pipe(body, { end: false })
                         v.on('end', function () { body.pipe(body) });
+                    }
+                    else if (lprop === '_map' && isObj(v)) {
+                        var mapkey = v[0], mapparams = v[1]
+                        var body = elem.createStream();
+                        var trr = trumpet();
+
+                        var ccat = (function () {
+                            var input = concat(function (template) {
+                                var tt = template.toString('utf8')
+
+                                var cmb = combine()
+                                mapparams.forEach(function (param) {
+                                    cmb.append(function (done) {
+                                        done(null, str(tt).pipe(hwm(param)))
+                                    })
+                                })
+                                cmb.append(null).pipe(output)
+                                
+                            });
+                            var output = thr();
+                            return duplexer(input, output);
+                        }());
+
+                        trr.select(mapkey).createReadStream({outer:true})
+                            .pipe(ccat).pipe(body);
+                        body.pipe(trr);
                     }
                     else {
                         var vp = value[prop];

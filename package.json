@@ -16,9 +16,9 @@
     "utf8-stream": "~0.0.0"
   },
   "devDependencies": {
-    "through": "~2.3.4",
+    "hyperquest": "~0.1.5",
     "tap": "~0.4.0",
-    "hyperquest": "~0.1.5"
+    "through": "^2.3.8"
   },
   "scripts": {
     "test": "tap test/*.js"

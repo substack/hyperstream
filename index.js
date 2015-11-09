@@ -105,14 +105,11 @@ function hwm (streams) {
                         v.on('end', function () { body.pipe(body) });
                     }
                     else if (lprop === '_map' && isObj(v)) {
-
                         var body = elem.createStream();
                         Object.keys(v).forEach(function (mapkey) {
                             var trr = trumpet();
-
                             var ccat = concat(function (template) {
                                 var tt = template.toString('utf8');
-
                                 var cmb = combine();
                                 v[mapkey].forEach(function (params) {
                                     cmb.append(function (done) {
@@ -120,9 +117,7 @@ function hwm (streams) {
                                     });
                                 });
                                 cmb.append(null).pipe(body);
-                                
                             });
-
                             trr.select(mapkey).createReadStream({outer:true}).pipe(ccat);
                             body.pipe(trr);
                         })

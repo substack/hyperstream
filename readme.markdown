@@ -56,6 +56,7 @@ html entities
 * `_prepend`, `_prependText` - add text to the beginning of the inner content
 encoded as html entities
 * `_prependHtml` - add raw html to the beginning of the inner context
+* `_map` - apply an array of hyperstream parameters to a matching HTML template
 
 For example, to set raw html into the inner content with the `_html` attribute,
 do:
@@ -63,12 +64,72 @@ do:
 ``` js
 hyperstream({
     '#content': {
-        _html: stream,
-        'data-start': 'cats!',
-        'data-end': 'cats!\ufff'
+        _html: stream, // apply raw stream of data
+        'data-start': 'cats!', // set attribute "data-start" to the value "cats!"
+        'data-end': 'cats!\ufff' // set attribute "data-end" to the value "cats!\ufff"
     }
 })
 ```
+* `_map` example
+
+index.html:
+```
+<html>
+  <body>
+    <div id="a"><h1>Group List</h1></div>
+    <div id="b">
+        <div class="row">
+            <span class="name">one</span> <span class="age">1</span>
+        </div>
+        <div class="row">
+            <span class="name">two</span> <span class="age">2</span>
+        </div>
+    </div>
+  </body>
+</html>
+```
+
+index.js:
+
+```
+var hyperstream = require('../');
+var fs = require('fs');
+
+var hs = hyperstream({
+    '#a > h1': 'Group List as of: ' + todays_date,
+    '#b': { _map: {
+            '.row': [
+                {'.name': 'person', '.age': 10},
+                {'.name': 'place', '.age': 20},
+                {'.name': 'thing', '.age': 30},
+            ]
+    }}
+});
+var rs = fs.createReadStream(__dirname + '/index.html');
+rs.pipe(hs).pipe(process.stdout);
+```
+
+output:
+
+```
+<html>
+  <body>
+    <div id="a"><h1>Group List: Nov. 9, 2015</h1></div>
+    <div id="b">
+        <div class="row">
+            <span class="name">person</span> <span class="age">10</span>
+        </div>
+        <div class="row">
+            <span class="name">place</span> <span class="age">20</span>
+        </div>
+        <div class="row">
+            <span class="name">thing</span> <span class="age">30</span>
+        </div>
+    </div>
+  </body>
+</html>
+```
+`_map` grabs the designated template from the source HTML stream, in this case within the tag having ID `"b"` find the first block of HTML having the class `"row"`. For each row of the data array the template is duplicated and the content of the class selectors matching the data parameter names is replaced with the corresponding data.
 
 You can also specify string operations for properties with an object instead of
 a string. The object can have these properties:

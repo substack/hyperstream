@@ -6,7 +6,7 @@ var hs = hyperstream({
     '#a > h1': function (template) {
         return template + template
     },
-    '#b': { _mapappend: {
+    '#b': { _map: { //append: {
             '.row': [
                 {'.name': 'person', '.age': 10},
                 {'.name': 'place', '.age': 20},

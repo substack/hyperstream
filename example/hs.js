@@ -3,15 +3,15 @@ var fs = require('fs');
 
 var hs = hyperstream({
     //'#a': fs.createReadStream(__dirname + '/hs/a.html'),
-    '#a': function (template) {
+    '#a > h1': function (template) {
         return template + template
     },
-    '#b': { _map: {
-            '.hey': [
-                {'.name': 'thing', '.age': 'finite'},
-                {'.name': 'calling', '.age': 'eternal'},
-                {'.name': 'calling3', '.age': 'eternal3'},
-                {'.name': 'essense', '.age': 'infinity'}
+    '#b': { _mapappend: {
+            '.row': [
+                {'.name': 'person', '.age': 10},
+                {'.name': 'place', '.age': 20},
+                {'.name': 'thing', '.age': 30},
+                {'.name': 'thought', '.age': 40}
             ] 
     }},
     '#c': { _text: fs.createReadStream(__dirname + '/hs/a.html') }

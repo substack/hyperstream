@@ -105,33 +105,23 @@ function hwm (streams) {
                         v.pipe(encoder()).pipe(body, { end: false });
                         v.on('end', function () { body.pipe(body) });
                     }
-                    else if (/^_map/.test(prop) && isObj(v)) {
+                    else if (prop === '_map' && isObj(v)) {
                         var body = elem.createStream();
-                        body.pipe(concat(function (bodybuf) {
-                            var cmb = combiner();
-                            if (lprop === '_mapappend') {
-                                cmb.append(function (done) {
-                                    done(null, str(bodybuf));
-                                });
-                            }
-                            Object.keys(v).forEach(function (mapkey) {
-                                cmb.append(function (done) {
-                                    var trr = trumpet();
-                                    var ccat = concat(function (template) {
-                                        var cmbb = combiner();
-                                        v[mapkey].forEach(function (params) {
-                                            cmbb.append(function (done) {
-                                                done(null, str(template).pipe(hwm(params)));
-                                            });
-                                        });
-                                        cmbb.append(null).pipe(body);
+                        Object.keys(v).forEach(function (mapkey) {
+                            var trr = trumpet();
+                            var ccat = concat(function (template) {
+                                var cmb = combiner();
+                                v[mapkey].forEach(function (params) {
+                                console.log(params)
+                                    cmb.append(function (done) {
+                                        done(null, str(template).pipe(hwm(params)));
                                     });
-                                    trr.createReadStream(mapkey, {outer:true}).pipe(ccat);
-                                    str(bodybuf).pipe(trr);
                                 });
-                            })
-                            cmb.append(null).pipe(body);
-                        }));
+                                cmb.append(null).pipe(body);
+                            });
+                            trr.createReadStream(mapkey, {outer:true}).pipe(ccat);
+                            body.pipe(trr);
+                        });
                     }
                     else {
                         var vp = value[prop];

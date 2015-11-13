@@ -2,11 +2,12 @@ var hyperstream = require('../');
 var fs = require('fs');
 
 var hs = hyperstream({
+    'head': { _mapprepend: { 'link': [{'link': {href: 'fun.css'}}]}},
     //'#a': fs.createReadStream(__dirname + '/hs/a.html'),
     '#a > h1': function (template) {
         return template + template
     },
-    '#b': { _mapprepend: { //append: {
+    '#b': { _mapappend: {
             '.row': [
                 {'.name': 'person', '.age': 10},
                 {'.name': 'place', '.age': 20},

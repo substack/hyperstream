@@ -110,35 +110,28 @@ function hwm (streams) {
                         body.pipe(concat(function (bodybuf) {
                             var cmb = combiner();
                             if (lprop === '_mapappend') {
-                                cmb.append(function (done) {
-                                    done(null, str(bodybuf));
-                                });
+                                cmb.append(str(bodybuf));
                             }
                             Object.keys(v).forEach(function (mapkey) {
                                 cmb.append(function (done) {
                                     var oo = through();
-                                    function bbtrr () {
-                                        var trr = trumpet();
-                                        var ccat = concat(function (template) {
-                                            var cmbb = combiner();
-                                            v[mapkey].forEach(function (params) {
-                                                cmbb.append(function (done) {
-                                                    done(null, str(template).pipe(hwm(params)));
-                                                });
+                                    var trr = trumpet();
+                                    var ccat = concat(function (template) {
+                                        var cmbb = combiner();
+                                        v[mapkey].forEach(function (params) {
+                                            cmbb.append(function (done) {
+                                                done(null, str(template).pipe(hwm(params)));
                                             });
-                                            cmbb.append(null).pipe(oo);
                                         });
-                                        trr.createReadStream(mapkey, {outer:true}).pipe(ccat);
-                                        str(bodybuf).pipe(trr);
-                                        return oo;
-                                    }
-                                    done(null, bbtrr());
+                                        cmbb.append(null).pipe(oo);
+                                    });
+                                    trr.createReadStream(mapkey, {outer:true}).pipe(ccat);
+                                    str(bodybuf).pipe(trr);
+                                    done(null, oo);
                                 });
                             });
                             if (lprop === '_mapprepend') {
-                                cmb.append(function (done) {
-                                    done(null, str(bodybuf));
-                                });
+                                cmb.append(str(bodybuf));
                             }
                             cmb.append(null).pipe(body);
                         }));

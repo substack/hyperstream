@@ -107,34 +107,35 @@ function hwm (streams) {
                     }
                     else if (/^_map/.test(prop) && isObj(v)) {
                         var body = elem.createStream();
-                        body.pipe(concat(function (bodybuf) {
+                        var catbodybuf = concat(function (bodybuf) {
                             var cmb = combiner();
                             if (lprop === '_mapappend') {
-                                cmb.append(str(bodybuf));
+                                cmb.append(bodybuf);
                             }
                             Object.keys(v).forEach(function (mapkey) {
                                 cmb.append(function (done) {
-                                    var oo = through();
+                                    var mapper = through();
                                     var trr = trumpet();
-                                    var ccat = concat(function (template) {
+                                    var cattemplate = concat(function (template) {
                                         var cmbb = combiner();
                                         v[mapkey].forEach(function (params) {
                                             cmbb.append(function (done) {
                                                 done(null, str(template).pipe(hwm(params)));
                                             });
                                         });
-                                        cmbb.append(null).pipe(oo);
+                                        cmbb.append(null).pipe(mapper);
                                     });
-                                    trr.createReadStream(mapkey, {outer:true}).pipe(ccat);
+                                    trr.createReadStream(mapkey, {outer:true}).pipe(cattemplate);
                                     str(bodybuf).pipe(trr);
-                                    done(null, oo);
+                                    done(null, mapper);
                                 });
                             });
                             if (lprop === '_mapprepend') {
-                                cmb.append(str(bodybuf));
+                                cmb.append(bodybuf);
                             }
                             cmb.append(null).pipe(body);
-                        }));
+                        })
+                        body.pipe(catbodybuf);
                     }
                     else {
                         var vp = value[prop];

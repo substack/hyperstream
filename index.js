@@ -141,8 +141,8 @@ function hwm (streams) {
                         var vp = value[prop];
                         if (vp && isObj(vp)) {
                             var cur = elem.getAttribute(prop) || '';
-                            if (vp.append) cur += vp.append;
-                            if (vp.prepend) cur = vp.prepend + cur;
+                            if (vp.append) cur += (Array.isArray(vp.append)? vp.append.join(''): vp.append);
+                            if (vp.prepend) cur = (Array.isArray(vp.append)? vp.prepend.join(''): vp.prepend) + cur;
                             elem.setAttribute(prop, cur);
                         }
                         else elem.setAttribute(prop, vp);

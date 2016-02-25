@@ -99,12 +99,12 @@ into:
 <div class="row active"><b>woo</b></div>
 ```
 
+And you can build table rows and lists of data using the `_map` property.
 `_map` grabs the designated sub-template from the source HTML stream and duplicates
 it for each member of a data array.
 
-* `_map`
-
 index.html:
+
 ```
 <html>
   <body>
@@ -163,9 +163,19 @@ output:
 ```
 
 In this case `_map` locates the sub-template by searching within the tag
-having ID `"b"` and getting the first block of HTML having the class `"row"`. For each row of the data
-array the sub-template is duplicated and the content of the class selectors matching the data
-parameter names is replaced with the corresponding data.
+having ID `"b"` and getting the first block of HTML having the class `"row"`.
+The sub-template is duplicated For each member of the data array and the
+content of the class selectors matching the data parameter names is replaced
+with the corresponding data.
+
+Rather than replace the existing sub-template data you can add additional data before or 
+after the data already in the template stream using these properties:
+
+* _mapappend
+* _mapprepend
+
+Using one of these properties will use the designated sub-template as model
+but not overwrite it, simply include more data in the output stream.
 
 ## hs.select(), hs.update(), hs.replace(), hs.remove()
 

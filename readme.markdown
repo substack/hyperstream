@@ -101,7 +101,7 @@ into:
 <div class="row active"><b>woo</b></div>
 ```
 
-And you can build table rows and lists of data using the `_map` property.
+And you can build table rows and lists of data using the `_map` attribute.
 `_map` grabs the designated sub-template from the source HTML stream and duplicates
 it for each member of a data array.
 
@@ -176,7 +176,7 @@ after the data already in the template stream using these properties:
 * _mapappend
 * _mapprepend
 
-Using one of these properties will use the designated sub-template as model
+Using one of these attributes will use the designated sub-template as model
 but not overwrite it, simply include more data in the output stream.
 
 ## hs.select(), hs.update(), hs.replace(), hs.remove()

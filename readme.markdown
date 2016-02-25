@@ -57,8 +57,8 @@ html entities
 encoded as html entities
 * `_prependHtml` - add raw html to the beginning of the inner context
 * `_map` - select an HTML segment to use as a template to be duplicated for each member of a data array
-* `_mapappend` - same as `_map` but insert before the sample template and don't overwrite it
-* `_mapprepend` - same as `_map` but insert after the sample template and don't overwrite it
+* `_mapappend` - same as `_map` but insert after the sample template and don't overwrite it
+* `_mapprepend` - same as `_map` but insert before the sample template and don't overwrite it
 
 For example, to set raw html into the inner content with the `_html` attribute,
 do:

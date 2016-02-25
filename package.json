@@ -4,22 +4,19 @@
   "description": "stream html into html at a css selector",
   "main": "index.js",
   "dependencies": {
-    "add-stream": "^1.0.0",
-    "combine-streams": "^1.0.0",
     "concat-stream": "^1.0.0",
-    "duplexer2": "^0.1.4",
-    "ent": "^2.0.0",
-    "stream-combiner2": "~1.0.1",
-    "string-to-stream": "^1.0.1",
-    "through": "^2.3.8",
     "through2": "~0.5.1",
     "trumpet": "^1.6.4",
-    "utf8-stream": "~0.0.0"
+    "ent": "^2.0.0",
+    "utf8-stream": "~0.0.0",
+    "stream-combiner2": "~1.0.1",
+    "combine-streams": "^1.0.0",
+    "string-to-stream": "^1.0.1"
   },
   "devDependencies": {
-    "hyperquest": "~0.1.5",
+    "through": "~2.3.4",
     "tap": "~0.4.0",
-    "through": "^2.3.8"
+    "hyperquest": "~0.1.5"
   },
   "scripts": {
     "test": "tap test/*.js"

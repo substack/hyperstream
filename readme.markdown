@@ -70,7 +70,7 @@ hyperstream({
     }
 })
 ```
-* `_map` example
+###`_map` example
 
 index.html:
 ```
@@ -92,7 +92,7 @@ index.html:
 index.js:
 
 ```
-var hyperstream = require('../');
+var hyperstream = require('hyperstream')
 var fs = require('fs');
 
 var hs = hyperstream({

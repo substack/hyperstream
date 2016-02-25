@@ -7,9 +7,9 @@ var ent = require('ent');
 var str = require('string-to-stream');
 var combiner = require('combine-streams');
 
-module.exports = hwm;
+module.exports = hyperstream;
 
-function hwm (streams) {
+function hyperstream (streams) {
     if (!streams) streams = {};
     var tr = trumpet();
     tr.setMaxListeners(Infinity);
@@ -120,7 +120,7 @@ function hwm (streams) {
                                         var cmbb = combiner();
                                         v[mapkey].forEach(function (params) {
                                             cmbb.append(function (done) {
-                                                done(null, str(template).pipe(hwm(params)));
+                                                done(null, str(template).pipe(hyperstream(params)));
                                             });
                                         });
                                         cmbb.append(null).pipe(mapper);

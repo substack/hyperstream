@@ -70,7 +70,39 @@ hyperstream({
     }
 })
 ```
-###`_map` example
+
+You can also specify string operations for properties with an object instead of
+a string. The object can have these properties:
+
+* `append`
+* `prepend`
+
+Object properties are particularly handy for adding classes:
+
+``` js
+hyperstream({
+    '.row': {
+        class: { append: ' active' }
+    }
+})
+```
+
+which turns:
+
+``` html
+<div class="row"><b>woo</b></div>
+```
+
+into:
+
+``` html
+<div class="row active"><b>woo</b></div>
+```
+
+`_map` grabs the designated sub-template from the source HTML stream and duplicates
+it for each member of a data array.
+
+* `_map`
 
 index.html:
 ```
@@ -129,35 +161,11 @@ output:
   </body>
 </html>
 ```
-`_map` grabs the designated template from the source HTML stream, in this case within the tag having ID `"b"` find the first block of HTML having the class `"row"`. For each row of the data array the template is duplicated and the content of the class selectors matching the data parameter names is replaced with the corresponding data.
 
-You can also specify string operations for properties with an object instead of
-a string. The object can have these properties:
-
-* `append`
-* `prepend`
-
-Object properties are particularly handy for adding classes:
-
-``` js
-hyperstream({
-    '.row': {
-        class: { append: ' active' }
-    }
-})
-```
-
-which turns:
-
-``` html
-<div class="row"><b>woo</b></div>
-```
-
-into:
-
-``` html
-<div class="row active"><b>woo</b></div>
-```
+In this case `_map` locates the sub-template by searching within the tag
+having ID `"b"` and getting the first block of HTML having the class `"row"`. For each row of the data
+array the sub-template is duplicated and the content of the class selectors matching the data
+parameter names is replaced with the corresponding data.
 
 ## hs.select(), hs.update(), hs.replace(), hs.remove()
 

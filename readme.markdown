@@ -171,7 +171,7 @@ content of the class selectors matching the data parameter names is replaced
 with the corresponding data.
 
 Rather than replace the existing sub-template data you can add additional data before or 
-after the data already in the template stream using these properties:
+after the data already in the template stream using these attributes:
 
 * _mapappend
 * _mapprepend

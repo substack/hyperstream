@@ -9,7 +9,9 @@
     "trumpet": "^1.6.4",
     "ent": "^2.0.0",
     "utf8-stream": "~0.0.0",
-    "stream-combiner2": "~1.0.1"
+    "stream-combiner2": "~1.0.1",
+    "combine-streams": "^1.0.0",
+    "string-to-stream": "^1.0.1"
   },
   "devDependencies": {
     "through": "~2.3.4",

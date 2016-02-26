@@ -4,8 +4,12 @@ var concat = require('concat-stream');
 var u8 = require('utf8-stream');
 var combine = require('stream-combiner2');
 var ent = require('ent');
+var str = require('string-to-stream');
+var combiner = require('combine-streams');
 
-module.exports = function (streams) {
+module.exports = hyperstream;
+
+function hyperstream (streams) {
     if (!streams) streams = {};
     var tr = trumpet();
     tr.setMaxListeners(Infinity);
@@ -36,7 +40,7 @@ module.exports = function (streams) {
                     var lprop = prop.toLowerCase();
                     var v = value[prop];
                     if (prop === '_html' && isStream(v)) {
-                        v.pipe(elem.createWriteStream())
+                        v.pipe(elem.createWriteStream());
                     }
                     else if (prop === '_html' && (Buffer.isBuffer(v)
                     || typeof v === 'string')) {
@@ -70,7 +74,7 @@ module.exports = function (streams) {
                     }
                     else if (lprop === '_prependhtml' && isStream(v)) {
                         var body = elem.createStream();
-                        v.pipe(body, { end: false })
+                        v.pipe(body, { end: false });
                         v.on('end', function () { body.pipe(body) });
                     }
                     else if ((prop === '_append' || lprop === '_appendtext')
@@ -98,8 +102,40 @@ module.exports = function (streams) {
                     else if ((prop === '_prepend' || lprop === '_prependtext')
                     && isStream(v)) {
                         var body = elem.createStream();
-                        v.pipe(encoder()).pipe(body, { end: false })
+                        v.pipe(encoder()).pipe(body, { end: false });
                         v.on('end', function () { body.pipe(body) });
+                    }
+                    else if (/^_map/.test(prop) && isObj(v)) {
+                        var body = elem.createStream();
+                        var catbodybuf = concat(function (bodybuf) {
+                            var cmb = combiner();
+                            if (lprop === '_mapappend') {
+                                cmb.append(bodybuf);
+                            }
+                            Object.keys(v).forEach(function (mapkey) {
+                                cmb.append(function (done) {
+                                    var mapper = through();
+                                    var trr = trumpet();
+                                    var cattemplate = concat(function (template) {
+                                        var cmbb = combiner();
+                                        v[mapkey].forEach(function (params) {
+                                            cmbb.append(function (done) {
+                                                done(null, str(template).pipe(hyperstream(params)));
+                                            });
+                                        });
+                                        cmbb.append(null).pipe(mapper);
+                                    });
+                                    trr.createReadStream(mapkey, {outer:true}).pipe(cattemplate);
+                                    str(bodybuf).pipe(trr);
+                                    done(null, mapper);
+                                });
+                            });
+                            if (lprop === '_mapprepend') {
+                                cmb.append(bodybuf);
+                            }
+                            cmb.append(null).pipe(body);
+                        })
+                        body.pipe(catbodybuf);
                     }
                     else {
                         var vp = value[prop];
